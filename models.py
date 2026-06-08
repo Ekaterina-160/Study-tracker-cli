@@ -34,7 +34,8 @@ class GradeRecord:
     @classmethod
     def from_dict(cls, data: dict) -> "GradeRecord":
         data["recorded_at"] = datetime.fromisoformat(data["recorded_at"])
-        data['grade'] = float(data['grade'])
+        data["grade"] = float(data["grade"])
+        data["class_number"] = int(data["class_number"])
         return cls(**data)
 
 
@@ -75,7 +76,7 @@ class GradeRepository:
         self._next_id: int = 1
         self._load()
 
-    def add(self, class_number: str, student_name: str, subject: str, grade: float, 
+    def add(self, class_number: int, student_name: str, subject: str, grade: float,
             assessment_type: str, comment: str = "") -> GradeRecord:
         record = GradeRecord(
             id=self._next_id, class_number=class_number, student_name=student_name, subject=subject,
@@ -167,10 +168,13 @@ class GradeAnalytics:
         return {subj: round(sum(g)/len(g), 2) for subj, g in groups.items()}
     
     @staticmethod
-    def average_student(records: List[GradeRecord], student_n) -> Optional[float]:
-        if not records: return None
+    def average_student(records: List[GradeRecord], student_n: str) -> Optional[float]:
+        if not records:
+            return None
         student = [r for r in records if student_n.lower() == r.student_name.lower()]
-        return round(sum(r.grade for r in student)/len(student), 2)
+        if not student:
+            return None
+        return round(sum(r.grade for r in student) / len(student), 2)
 
 class SessionAnalytics:
     @staticmethod
