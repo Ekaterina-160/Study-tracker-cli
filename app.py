@@ -16,7 +16,7 @@ def home():
 
 @app.route('/health')
 def health_check():
-    return "<h1>Приложение работает</h1>"
+    return "<h1>Приложение работает!</h1>"
 
 if __name__ == '__main__':
     # debug=True автоматически перезагружает сервер при изменении кода
