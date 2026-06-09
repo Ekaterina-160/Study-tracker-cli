@@ -1,0 +1,6 @@
+# Study Tracker CLI — внешние зависимости не требуются.
+# Используется только стандартная библиотека Python (dataclasses, datetime, json, os, typing).
+#
+# Минимальная версия Python: 3.10
+flask 
+python-dotenv
