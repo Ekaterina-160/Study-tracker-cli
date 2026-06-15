@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head><title>Добавить оценку</title></head>
+<body>
+    <h2>Добавить новую оценку</h2>
+    <!-- form.hidden_tag() автоматически добавляет тот самый CSRF-токен -->
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.student_name.label }}<br>
+            {{ form.student_name(size=32) }}
+            {% for error in form.student_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.subject.label }}<br>
+            {{ form.subject(size=32) }}
+        </p>
+        <p>
+            {{ form.score.label }}<br>
+            {{ form.score() }}
+        </p>
+        <p>
+            {{ form.work_type.label }}<br>
+            {{ form.work_type(size=32) }}
+        </p>
+        <p>
+            {{ form.comment.label }}<br>
+            {{ form.comment(size=32) }}
+        </p>
+        <p>
+            {{ form.date.label }}<br>
+            {{ form.date() }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+</body>
+</html>

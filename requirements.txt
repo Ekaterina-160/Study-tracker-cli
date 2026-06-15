@@ -4,3 +4,6 @@
 # Минимальная версия Python: 3.10
 flask 
 python-dotenv
+flask-sqlalchemy
+flask-migrate
+flask-wtf
