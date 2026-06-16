@@ -22,8 +22,13 @@
             {{ form.score() }}
         </p>
         <p>
-            {{ form.work_type.label }}<br>
-            {{ form.work_type(size=32) }}
+            <label for="work_type">Выберите тип работы:</label>
+            <select id="work_type" name="work_type">
+                <option value="Контрольная работа">Контрольная работа</option>
+                <option value="Домашняя работа">Домашняя работа</option>
+                <option value="Самостоятельная работа">Самостоятельная работа</option>
+                <option value="Практическая работа">Практическая работа</option>
+            </select>
         </p>
         <p>
             {{ form.comment.label }}<br>
