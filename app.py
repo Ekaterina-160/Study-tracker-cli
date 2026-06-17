@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from extensions import db
 from forms import GradeForm
 from db_models import GradeRecord
+from flask_login import LoginManager
+
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -20,6 +22,10 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 with app.app_context():
     db.create_all()
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login' # Имя роута, куда кидать неавторизованных
 
 @app.route('/')
 def home():
@@ -54,3 +60,16 @@ if __name__ == '__main__':
     # debug=True автоматически перезагружает сервер при изменении кода
     app.run(debug=True)
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = GradeForm()
+    if form.validate_on_submit():
+        user.set_password()
+        db.session.commit()
+
+@app.route('/login', methods=['GET', 'POST'])
+def add_grade():
+    form = GradeForm()
+    if form.validate_on_submit():
+        login_user(user)
+        db.session.commit()

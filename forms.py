@@ -10,3 +10,5 @@ class GradeForm(FlaskForm):
     comment = StringField('Комментарий', validators=[DataRequired()])
     date = DateField('Дата', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Сохранить оценку')
+
+class Registr(FlaskForm):
