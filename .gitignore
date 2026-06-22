@@ -2,3 +2,4 @@ __pycache__/
 venv/
 *.pyc
 instance/journal.db
+*.db

@@ -87,8 +87,13 @@ def login():
             login_user(user)
             flash('Вы успешно вошли.', 'success')
             return redirect(url_for('add_grade'))
-        flash('Неверное имя пользователя или пароль.', 'danger')
-        return redirect(url_for('login'))
+        else:
+            if user:
+                flash('Неверный пароль.', 'danger')
+                return redirect(url_for('login'))
+            else:
+                flash('Неверное имя пользователя.', 'danger')
+                return redirect(url_for('login'))
     return render_template('login.html', form=form)
 
 if __name__ == '__main__':
