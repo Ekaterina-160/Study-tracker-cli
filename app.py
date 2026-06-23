@@ -5,6 +5,7 @@ from extensions import db
 from db_models import GradeRecord, User
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from forms import GradeForm, RegisterForm, LoginForm
+from analytics import grades_to_dataframe, has_grade_data
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -95,6 +96,26 @@ def login():
                 flash('Неверное имя пользователя.', 'danger')
                 return redirect(url_for('login'))
     return render_template('login.html', form=form)
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    records = GradeRecord.query.all()
+    df = grades_to_dataframe(records)
+
+    if df.empty:
+       return render_template("dashboard.html", has_data=False)
+
+    total_records = len(df)
+    average_score = round(df["score"].mean(), 2)
+
+    return render_template(
+       "dashboard.html",
+       has_data=True,
+       total_records=total_records,
+       average_score=average_score,
+    )
+
 
 if __name__ == '__main__':
     # debug=True автоматически перезагружает сервер при изменении кода
