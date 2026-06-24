@@ -5,7 +5,7 @@ from extensions import db
 from db_models import GradeRecord, User
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from forms import GradeForm, RegisterForm, LoginForm
-from analytics import grades_to_dataframe, has_grade_data
+from analytics import *
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -108,12 +108,18 @@ def dashboard():
 
     total_records = len(df)
     average_score = round(df["score"].mean(), 2)
+    metrics = calculate_summary_metrics(df)
+    subjects_summary = average_score_by_subject(df)
+    score_summary = score_distribution(df)
 
     return render_template(
        "dashboard.html",
        has_data=True,
        total_records=total_records,
        average_score=average_score,
+       metrics = metrics,
+       subjects_summary=subjects_summary,
+       score_summary = score_summary,
     )
 
 

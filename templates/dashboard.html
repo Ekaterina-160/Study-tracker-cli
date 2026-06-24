@@ -11,6 +11,15 @@
        {% else %}
            <p>Всего записей: {{ total_records }}</p>
            <p>Средний балл: {{ average_score }}</p>
-       {% endif %}
+           <h3>Средний балл по предметам</h3>
+        {% for item in subjects_summary %}
+            <p>{{ item.subject }}: {{ item.average_score }} ({{ item.records_count }} записей)</p>
+        {% endfor %}
+
+        <h3>Количество оценок</h3>
+        {% for item in score_summary %}
+            <p>Оценка {{ item.score }}: {{ item.records_count }}</p>
+        {% endfor %}
+        {% endif %}
    </body>
    </html>
