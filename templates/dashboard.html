@@ -6,9 +6,9 @@
    <body>
        <h2>Аналитика оценок</h2>
 
-       {% if not has_data %}
+        {% if not has_data %}
            <p>Пока нет данных для аналитики. Добавьте первую оценку.</p>
-       {% else %}
+        {% else %}
            <p>Всего записей: {{ total_records }}</p>
            <p>Средний балл: {{ average_score }}</p>
            <h3>Средний балл по предметам</h3>
@@ -21,5 +21,16 @@
             <p>Оценка {{ item.score }}: {{ item.records_count }}</p>
         {% endfor %}
         {% endif %}
-   </body>
+
+        {% if subject_chart %}
+            {{ subject_chart|safe }}
+        {% endif %}
+
+        {% if distribution_chart %}
+            {{ distribution_chart|safe }}
+        {% endif %}
+
+        {% if trend_chart %}
+            {{ trend_chart|safe }}
+        {% endif %}
    </html>

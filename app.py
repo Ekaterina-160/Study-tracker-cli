@@ -7,6 +7,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from forms import GradeForm, RegisterForm, LoginForm
 from analytics import *
 
+
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 app = Flask(__name__)
@@ -111,6 +112,9 @@ def dashboard():
     metrics = calculate_summary_metrics(df)
     subjects_summary = average_score_by_subject(df)
     score_summary = score_distribution(df)
+    subject_chart = build_subject_average_chart(df)
+    distribution_chart = build_score_distribution_chart(df)
+    trend_chart = build_score_trend_chart(df)
 
     return render_template(
        "dashboard.html",
@@ -120,6 +124,9 @@ def dashboard():
        metrics = metrics,
        subjects_summary=subjects_summary,
        score_summary = score_summary,
+       subject_chart = subject_chart,
+       distribution_chart = distribution_chart,
+       trend_chart = trend_chart,
     )
 
 
