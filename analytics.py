@@ -143,3 +143,25 @@ def build_score_trend_chart(df):
     )
 
     return figure_to_html(fig)
+
+def get_available_subjects(df):
+    if df.empty:
+        return []
+
+    return sorted(df["subject"].dropna().unique().tolist())
+
+def apply_grade_filters(df, subject=None, date_from=None, date_to=None):
+    if df.empty:
+        return df
+    filtered = df.copy()
+
+    if subject:
+        filtered = filtered[filtered["subject"] == subject]
+
+    if date_from:
+        filtered = filtered[filtered["date"] >= pd.to_datetime(date_from)]
+
+    if date_to:
+        filtered = filtered[filtered["date"] <= pd.to_datetime(date_to)]
+
+    return filtered

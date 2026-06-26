@@ -6,7 +6,7 @@ from db_models import GradeRecord, User
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from forms import GradeForm, RegisterForm, LoginForm
 from analytics import *
-
+from flask import request
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -115,6 +115,9 @@ def dashboard():
     subject_chart = build_subject_average_chart(df)
     distribution_chart = build_score_distribution_chart(df)
     trend_chart = build_score_trend_chart(df)
+    selected_subject = request.args.get("subject") or None
+    date_from = request.args.get("date_from") or None
+    date_to = request.args.get("date_to") or None
 
     return render_template(
        "dashboard.html",
@@ -127,6 +130,9 @@ def dashboard():
        subject_chart = subject_chart,
        distribution_chart = distribution_chart,
        trend_chart = trend_chart,
+       selected_subject = selected_subject,
+       date_from = date_from,
+       date_to = date_to,
     )
 
 

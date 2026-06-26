@@ -7,3 +7,4 @@ python-dotenv
 flask-sqlalchemy
 flask-migrate
 flask-wtf
+pandas 
