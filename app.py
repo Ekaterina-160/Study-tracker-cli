@@ -105,7 +105,9 @@ def dashboard():
     df = grades_to_dataframe(records)
 
     if df.empty:
-       return render_template("dashboard.html", has_data=False)
+        return render_template("dashboard.html", has_data=False)
+
+    df = prepare_grades_dataframe(df)
 
     total_records = len(df)
     average_score = round(df["score"].mean(), 2)
@@ -113,26 +115,27 @@ def dashboard():
     subjects_summary = average_score_by_subject(df)
     score_summary = score_distribution(df)
     subject_chart = build_subject_average_chart(df)
-    distribution_chart = build_score_distribution_chart(df)
     trend_chart = build_score_trend_chart(df)
+    subject_month_trend_chart = build_subject_month_trend_chart(df)
     selected_subject = request.args.get("subject") or None
     date_from = request.args.get("date_from") or None
     date_to = request.args.get("date_to") or None
+    
 
     return render_template(
        "dashboard.html",
-       has_data=True,
-       total_records=total_records,
-       average_score=average_score,
-       metrics = metrics,
-       subjects_summary=subjects_summary,
-       score_summary = score_summary,
-       subject_chart = subject_chart,
-       distribution_chart = distribution_chart,
-       trend_chart = trend_chart,
-       selected_subject = selected_subject,
-       date_from = date_from,
-       date_to = date_to,
+        has_data=True,
+        total_records=total_records,
+        average_score=average_score,
+        metrics=metrics,
+        subjects_summary=subjects_summary,
+        score_summary=score_summary,
+        subject_chart=subject_chart,
+        trend_chart=trend_chart,
+        subject_month_trend_chart=subject_month_trend_chart,
+        selected_subject=selected_subject,
+        date_from=date_from,
+        date_to=date_to,
     )
 
 

@@ -99,50 +99,77 @@ def build_subject_average_chart(df):
 
     return figure_to_html(fig)
 
-def build_score_distribution_chart(df):
-    if df.empty:
-        return None
 
-    data = (
-        df.groupby("score", as_index=False)
-        .agg(records_count=("score", "count"))
-        .sort_values("score")
-    )
-
-    fig = px.bar(
-        data,
-        x="score",
-        y="records_count",
-        title="Распределение оценок",
-        labels={
-            "score": "Оценка",
-            "records_count": "Количество",
-        },
-    )
-
-    return figure_to_html(fig)
 
 def build_score_trend_chart(df):
     if df.empty:
         return None
-
-    data = df.sort_values("date")
-
+    data = df.copy()
+    data["month"] = data["date"].dt.to_period("M").dt.to_timestamp()
+    monthly = (
+        data.groupby("month", as_index=False)
+        .agg(
+            average_score=("score", "mean"),
+            records_count=("score", "count"),
+        )
+        .sort_values("month")
+    )
+    monthly["average_score"] = monthly["average_score"].round(2)
     fig = px.line(
-        data,
-        x="date",
-        y="score",
-        color="subject",
+        monthly,
+        x="month",
+        y="average_score",
         markers=True,
-        title="Динамика оценок по датам",
+        title="Средний балл класса по месяцам",
         labels={
-            "date": "Дата",
-            "score": "Оценка",
-            "subject": "Предмет",
+            "month": "Месяц",
+            "average_score": "Средний балл",
+            "records_count": "Кол-во оценок",
+        },
+        hover_data={
+            "records_count": True,
         },
     )
-
+    fig.update_yaxes(range=[2, 5])
     return figure_to_html(fig)
+
+def build_subject_month_trend_chart(df):
+    if df.empty:
+        return None
+
+    data = df.copy()
+    data["month"] = data["date"].dt.to_period("M").dt.to_timestamp()
+
+    monthly_by_subject = (
+        data.groupby(["month", "subject"], as_index=False)
+        .agg(
+            average_score=("score", "mean"),
+            records_count=("score", "count"),
+        )
+        .sort_values(["month", "subject"])
+    )
+    monthly_by_subject["average_score"] = monthly_by_subject["average_score"].round(2)
+
+    fig = px.line(
+        monthly_by_subject,
+        x="month",
+        y="average_score",
+        color="subject",
+        markers=True,
+        title="Средний балл по предметам и месяцам",
+        labels={
+            "month": "Месяц",
+            "average_score": "Средний балл",
+            "subject": "Предмет",
+        },
+        hover_data={
+            "records_count": True,
+        },
+    )
+    fig.update_yaxes(range=[2, 5])
+    
+    return figure_to_html(fig)
+
 
 def get_available_subjects(df):
     if df.empty:
@@ -165,3 +192,4 @@ def apply_grade_filters(df, subject=None, date_from=None, date_to=None):
         filtered = filtered[filtered["date"] <= pd.to_datetime(date_to)]
 
     return filtered
+

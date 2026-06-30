@@ -26,11 +26,13 @@
             {{ subject_chart|safe }}
         {% endif %}
 
-        {% if distribution_chart %}
-            {{ distribution_chart|safe }}
-        {% endif %}
-
         {% if trend_chart %}
             {{ trend_chart|safe }}
         {% endif %}
+
+        {% if subject_month_trend_chart %}
+            {{ subject_month_trend_chart|safe }}
+        {% endif %}
+
+Можно добавить заголовки:
    </html>
