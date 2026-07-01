@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+   <html>
+   <head>
+       <title>Аналитика</title>
+   </head>
+   <body>
+       <h2>Аналитика оценок</h2>
+        <form method="get">
+            <label for="subject">Предмет:</label>
+            <select name="subject" id="subject">
+                <option value="">Все предметы</option>
+                {% for subject in available_subjects %}
+                    <option value="{{ subject }}" {% if subject == selected_subject %}selected{% endif %}>
+                        {{ subject }}
+                    </option>
+                {% endfor %}
+            </select>
+        
+            <label for="date_from">С:</label>
+            <input type="date" name="date_from" id="date_from" value="{{ date_from or '' }}">
+        
+            <label for="date_to">По:</label>
+            <input type="date" name="date_to" id="date_to" value="{{ date_to or '' }}">
+        
+            <button type="submit">Применить</button>
+            <a href="{{ url_for('dashboard') }}">Сбросить</a>
+        </form>
+
+        {% if not has_data %}
+           <p>Пока нет данных для аналитики. Добавьте первую оценку.</p>
+        {% else %}
+           <p>Всего записей: {{ total_records }}</p>
+           <p>Средний балл: {{ average_score }}</p>
+           <h3>Средний балл по предметам</h3>
+        {% for item in subjects_summary %}
+            <p>{{ item.subject }}: {{ item.average_score }} ({{ item.records_count }} записей)</p>
+        {% endfor %}
+
+        <h3>Количество оценок</h3>
+        {% for item in score_summary %}
+            <p>Оценка {{ item.score }}: {{ item.records_count }}</p>
+        {% endfor %}
+        {% endif %}
+
+        {% if subject_chart %}
+            {{ subject_chart|safe }}
+        {% endif %}
+
+        {% if trend_chart %}
+            {{ trend_chart|safe }}
+        {% endif %}
+
+        {% if subject_month_trend_chart %}
+            {{ subject_month_trend_chart|safe }}
+        {% endif %}
+
+   </html>
