@@ -16,6 +16,27 @@
             <p>{{ item.subject }}: {{ item.average_score }} ({{ item.records_count }} записей)</p>
         {% endfor %}
 
+        <form method="get">
+            <label for="subject">Предмет:</label>
+            <select name="subject" id="subject">
+                <option value="">Все предметы</option>
+                {% for subject in available_subjects %}
+                    <option value="{{ subject }}" {% if subject == selected_subject %}selected{% endif %}>
+                        {{ subject }}
+                    </option>
+                {% endfor %}
+            </select>
+        
+            <label for="date_from">С:</label>
+            <input type="date" name="date_from" id="date_from" value="{{ date_from or '' }}">
+        
+            <label for="date_to">По:</label>
+            <input type="date" name="date_to" id="date_to" value="{{ date_to or '' }}">
+        
+            <button type="submit">Применить</button>
+            <a href="{{ url_for('dashboard') }}">Сбросить</a>
+        </form>
+
         <h3>Количество оценок</h3>
         {% for item in score_summary %}
             <p>Оценка {{ item.score }}: {{ item.records_count }}</p>
