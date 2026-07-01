@@ -5,17 +5,6 @@
    </head>
    <body>
        <h2>Аналитика оценок</h2>
-
-        {% if not has_data %}
-           <p>Пока нет данных для аналитики. Добавьте первую оценку.</p>
-        {% else %}
-           <p>Всего записей: {{ total_records }}</p>
-           <p>Средний балл: {{ average_score }}</p>
-           <h3>Средний балл по предметам</h3>
-        {% for item in subjects_summary %}
-            <p>{{ item.subject }}: {{ item.average_score }} ({{ item.records_count }} записей)</p>
-        {% endfor %}
-
         <form method="get">
             <label for="subject">Предмет:</label>
             <select name="subject" id="subject">
@@ -37,6 +26,16 @@
             <a href="{{ url_for('dashboard') }}">Сбросить</a>
         </form>
 
+        {% if not has_data %}
+           <p>Пока нет данных для аналитики. Добавьте первую оценку.</p>
+        {% else %}
+           <p>Всего записей: {{ total_records }}</p>
+           <p>Средний балл: {{ average_score }}</p>
+           <h3>Средний балл по предметам</h3>
+        {% for item in subjects_summary %}
+            <p>{{ item.subject }}: {{ item.average_score }} ({{ item.records_count }} записей)</p>
+        {% endfor %}
+
         <h3>Количество оценок</h3>
         {% for item in score_summary %}
             <p>Оценка {{ item.score }}: {{ item.records_count }}</p>
@@ -55,5 +54,4 @@
             {{ subject_month_trend_chart|safe }}
         {% endif %}
 
-Можно добавить заголовки:
    </html>

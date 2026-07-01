@@ -103,31 +103,36 @@ def login():
 def dashboard():
     records = GradeRecord.query.all()
     df = grades_to_dataframe(records)
-    filtered_df = pd.DataFrame()
 
     if df.empty:
         return render_template("dashboard.html", has_data=False)
 
     df = prepare_grades_dataframe(df)
-    
-
-
-    total_records = len(df)
-    average_score = round(df["score"].mean(), 2)
-    metrics = calculate_summary_metrics(df)
-    subjects_summary = average_score_by_subject(df)
-    score_summary = score_distribution(df)
-    subject_chart = build_subject_average_chart(filtered_df)
-    trend_chart = build_score_trend_chart(filtered_df)
-    subject_month_trend_chart = build_subject_month_trend_chart(filtered_df)
     selected_subject = request.args.get("subject") or None
     date_from = request.args.get("date_from") or None
     date_to = request.args.get("date_to") or None
     available_subjects = get_available_subjects(df)
-    
+
     filtered_df = apply_grade_filters(
         df,
         subject=selected_subject,
+        date_from=date_from,
+        date_to=date_to,
+    )
+
+    total_records = len(filtered_df)
+    average_score = round(filtered_df["score"].mean(), 2) if not filtered_df.empty else None
+    metrics = calculate_summary_metrics(filtered_df)
+    subjects_summary = average_score_by_subject(filtered_df)
+    score_summary = score_distribution(filtered_df)
+    subject_chart = build_subject_average_chart(filtered_df)
+    trend_chart = build_score_trend_chart(
+        filtered_df,
+        date_from=date_from,
+        date_to=date_to,
+    )
+    subject_month_trend_chart = build_subject_month_trend_chart(
+        filtered_df,
         date_from=date_from,
         date_to=date_to,
     )

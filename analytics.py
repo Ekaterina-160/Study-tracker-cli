@@ -75,6 +75,16 @@ def score_distribution(df):
 def figure_to_html(fig):
     return fig.to_html(full_html=False, include_plotlyjs="cdn")
 
+def apply_date_axis_range(fig, date_from=None, date_to=None):
+    if date_from or date_to:
+        fig.update_xaxes(
+            range=[
+                pd.to_datetime(date_from) if date_from else None,
+                pd.to_datetime(date_to) if date_to else None,
+            ]
+        )
+    return fig
+
 def build_subject_average_chart(df):
     if df.empty:
         return None
@@ -101,7 +111,7 @@ def build_subject_average_chart(df):
 
 
 
-def build_score_trend_chart(df):
+def build_score_trend_chart(df, date_from=None, date_to=None):
     if df.empty:
         return None
     data = df.copy()
@@ -131,9 +141,10 @@ def build_score_trend_chart(df):
         },
     )
     fig.update_yaxes(range=[2, 5])
+    apply_date_axis_range(fig, date_from=date_from, date_to=date_to)
     return figure_to_html(fig)
 
-def build_subject_month_trend_chart(df):
+def build_subject_month_trend_chart(df, date_from=None, date_to=None):
     if df.empty:
         return None
 
@@ -167,6 +178,7 @@ def build_subject_month_trend_chart(df):
         },
     )
     fig.update_yaxes(range=[2, 5])
+    apply_date_axis_range(fig, date_from=date_from, date_to=date_to)
     
     return figure_to_html(fig)
 
